@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather Agent — AI-Powered Real-Time Weather &amp; Forecasts</title>
+  <meta name="description" content="AI-Powered Weather Agent. Real-time weather, temperature, humidity, wind, and 5-step forecasts for any city using MCP and OpenWeatherMap." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body id="body">
+
+  <!-- ========== ANIMATED BACKGROUND ========== -->
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="bg-gradient-base"></div>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="bg-grid"></div>
+  </div>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a class="nav-brand" href="/" aria-label="Weather Agent Home">
+        <div class="nav-logo-icon">&#127780;&#65039;</div>
+        <span class="nav-logo-text">Weather <em>Agent</em></span>
+      </a>
+      <div class="nav-actions">
+        <span class="nav-badge">AI Agent &bull; MCP Protocol &bull; OpenWeather</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========== HERO SECTION ========== -->
+  <section class="hero" id="hero-section">
+    <div class="hero-inner">
+
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        <span>AI Weather Agent</span>
+        <span class="eyebrow-dot"></span>
+      </div>
+
+      <h1 class="hero-title" id="hero-title">
+        Real-Time Weather &amp;<br/>
+        <span class="hero-title-accent">MCP Forecast Agent</span>
+      </h1>
+
+      <p class="hero-desc" id="hero-desc">
+        Instant real-time weather conditions, atmospheric metrics, and 5-step future projections for any city worldwide.
+      </p>
+
+      <!-- Main Search Card -->
+      <div class="search-card" id="search-card">
+        <form class="search-form" id="search-form" autocomplete="off">
+          <div class="search-row">
+            <div class="search-field-wrap">
+              <label class="search-label" for="search-input">City Name</label>
+              <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="Enter city (e.g. London, Tokyo, New York, Paris, Dubai)..."
+                aria-label="City Name"
+                maxlength="100"
+                required
+              />
+            </div>
+            <button type="submit" class="search-btn" id="search-btn" aria-label="Get Weather">
+              <span class="btn-text" id="btn-text">Get Weather &#8594;</span>
+              <span class="btn-loader" aria-hidden="true"></span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Popular City Suggestions -->
+        <div class="suggestions-row" id="suggestions-row">
+          <span class="suggestions-label">Popular:</span>
+          <div class="suggestion-pills" id="suggestion-pills">
+            <button type="button" class="pill" data-city="London">&#9728;&#65039; London</button>
+            <button type="button" class="pill" data-city="Tokyo">&#127800; Tokyo</button>
+            <button type="button" class="pill" data-city="New York">&#128509; New York</button>
+            <button type="button" class="pill" data-city="Paris">&#127956; Paris</button>
+            <button type="button" class="pill" data-city="Dubai">&#127958;&#65039; Dubai</button>
+            <button type="button" class="pill" data-city="Sydney">&#127796; Sydney</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Strip -->
+      <div class="feature-strip">
+        <div class="fstrip-item">
+          <span class="fstrip-icon">&#127777;&#65039;</span>
+          <span>Live Temperature</span>
+        </div>
+        <div class="fstrip-sep"></div>
+        <div class="fstrip-item">
+          <span class="fstrip-icon">&#128167;</span>
+          <span>Humidity &amp; Wind</span>
+        </div>
+        <div class="fstrip-sep"></div>
+        <div class="fstrip-item">
+          <span class="fstrip-icon">&#128198;</span>
+          <span>5-Step Forecast</span>
+        </div>
+        <div class="fstrip-sep"></div>
+        <div class="fstrip-item">
+          <span class="fstrip-icon">&#9881;&#65039;</span>
+          <span>MCP Server</span>
+        </div>
+        <div class="fstrip-sep"></div>
+        <div class="fstrip-item">
+          <span class="fstrip-icon">&#9889;</span>
+          <span>Real-Time Sync</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========== ERROR TOAST ========== -->
+  <div class="error-toast hidden" id="error-banner" role="alert">
+    <span>&#9888;&#65039;</span>
+    <span id="error-message">Something went wrong.</span>
+    <button class="toast-close" id="error-close" aria-label="Dismiss">&#10005;</button>
+  </div>
+
+  <!-- ========== LOADING SCREEN ========== -->
+  <section class="loading-screen hidden" id="loading-section" aria-live="polite">
+    <div class="loading-center">
+      <div class="compass-ring">
+        <div class="compass-needle">&#127780;&#65039;</div>
+      </div>
+      <p class="loading-headline">Fetching Weather Data&hellip;</p>
+      <p class="loading-sub" id="loading-status">Querying OpenWeatherMap via MCP Server</p>
+      <div class="loading-track">
+        <div class="ltrack-step active">
+          <span class="ltrack-icon">&#127777;&#65039;</span>
+          <span>Current Conditions</span>
+        </div>
+        <div class="ltrack-arrow">&#8594;</div>
+        <div class="ltrack-step active">
+          <span class="ltrack-icon">&#128198;</span>
+          <span>5-Step Forecast</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WEATHER AGENT RESULTS ========== -->
+  <main class="results-section hidden" id="weather-results-section">
+    <div class="results-wrap">
+      
+      <div class="results-topbar">
+        <div>
+          <h2 class="results-heading" id="w-result-title">Weather Report</h2>
+          <p class="results-sub" id="w-result-meta">Live data retrieved via OpenWeatherMap MCP Agent</p>
+        </div>
+        <button class="btn-ghost" id="w-new-search-btn">&#8592; Search Another City</button>
+      </div>
+
+      <!-- Current Weather Hero Card -->
+      <div class="weather-hero-card">
+        <div class="whc-top">
+          <div class="whc-left">
+            <p class="whc-city" id="w-city">&mdash;</p>
+            <p class="whc-condition" id="w-condition">&mdash;</p>
+            <div class="whc-temp-row">
+              <span class="whc-temp" id="w-temp">&mdash;</span>
+              <span class="whc-unit">&deg;C</span>
+            </div>
+          </div>
+          <div class="whc-icon" id="w-icon" aria-hidden="true">&#9728;&#65039;</div>
+        </div>
+        
+        <div class="whc-details">
+          <div class="whc-detail">
+            <span class="whcd-icon">&#127777;&#65039;</span>
+            <p class="whcd-label">Feels Like</p>
+            <p class="whcd-val" id="w-feels">&mdash;</p>
+          </div>
+          <div class="whc-detail">
+            <span class="whcd-icon">&#128167;</span>
+            <p class="whcd-label">Humidity</p>
+            <p class="whcd-val" id="w-humidity">&mdash;</p>
+          </div>
+          <div class="whc-detail">
+            <span class="whcd-icon">&#128168;</span>
+            <p class="whcd-label">Wind Speed</p>
+            <p class="whcd-val" id="w-wind">&mdash;</p>
+          </div>
+          <div class="whc-detail">
+            <span class="whcd-icon">&#127757;</span>
+            <p class="whcd-label">Agent Status</p>
+            <p class="whcd-val" style="color:#34d399;">MCP Live &check;</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5-Step Forecast Card -->
+      <div class="content-card">
+        <div class="content-card-header">
+          <h3 class="content-card-title">&#128198; Upcoming 5-Step Forecast</h3>
+        </div>
+        <div class="forecast-row" id="forecast-grid">
+          <!-- Dynamically inserted cards -->
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="site-footer">
+    <p>Weather Agent &nbsp;&bull;&nbsp; FastAPI + Model Context Protocol (MCP) &nbsp;&bull;&nbsp; OpenWeatherMap</p>
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
