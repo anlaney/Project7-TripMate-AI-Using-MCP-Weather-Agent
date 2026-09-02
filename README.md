@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ✈️ TripMate AI — A Multi-Agent Travel Planner with MCP
 
 An open-source AI travel planner that turns a natural-language trip request into a practical travel plan with flight suggestions, hotel ideas, weather details, and a day-by-day itinerary. The project uses a multi-agent workflow built with LangGraph, LangChain, FastAPI, and MCP tooling.
@@ -158,3 +159,6 @@ Contributions are welcome. If you want to improve the app, add new travel featur
 ## Acknowledgments
 
 This project is built with the help of modern LLM tooling, MCP integrations, and travel APIs. It is intended as a practical example of combining LangGraph agents with real-world applications.
+=======
+# Project7-TripMate-AI-Using-MCP-Weather-Agent
+>>>>>>> 96c52af9896d15addd307e4ca20b835bfada558c
